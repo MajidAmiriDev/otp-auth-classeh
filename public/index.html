@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Register</title>
+</head>
+<body>
+<h1>ثبت نام</h1>
+<form id="registerForm">
+    <input type="text" id="mobile" placeholder="شماره موبایل" required>
+    <input type="password" id="password" placeholder="رمز عبور" required>
+    <button type="submit">ثبت نام</button>
+</form>
+
+<h1>ورود</h1>
+<form id="loginForm">
+    <input type="text" id="loginMobile" placeholder="شماره موبایل" required>
+    <button type="submit">دریافت کد تایید</button>
+</form>
+
+<h1>تایید کد</h1>
+<form id="verifyForm">
+    <input type="text" id="verifyMobile" placeholder="شماره موبایل" required>
+    <input type="text" id="otp" placeholder="کد تایید" required>
+    <button type="submit">ورود</button>
+</form>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const mobile = document.getElementById('mobile').value;
+        const password = document.getElementById('password').value;
+        const response = await fetch('/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mobile, password })
+        });
+        const data = await response.json();
+        alert(data.message);
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const mobile = document.getElementById('loginMobile').value;
+        const response = await fetch('/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mobile })
+        });
+        const data = await response.json();
+        alert(data.message);
+    });
+
+    document.getElementById('verifyForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const mobile = document.getElementById('verifyMobile').value;
+        const code = document.getElementById('otp').value;
+        const response = await fetch('/auth/verify-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mobile, code })
+        });
+        const data = await response.json();
+        alert(data.message);
+    });
+</script>
+</body>
+</html>
